@@ -2,7 +2,7 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(
-    name='KalturaClient',
+    name='python-kaltura',
     version='1.0.0',
     url='http://www.kaltura.com/api_v3/testme/client-libs.php',
     packages=['KalturaClient', 'KalturaClient.Plugins'],
