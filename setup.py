@@ -13,7 +13,9 @@ setup(
     install_requires = [
             'poster',
         ],
-    author='Patrick Tchankue',
+    #author='Patrick Tchankue',
+    maintainer ='Patrick Tchankue',
+    maintainer_email = 'ptchankue@gmail.com',
     keywords = ['kaltura', 'python', 'django', 'flask'], # arbitrary keywords
     url = 'https://github.com/ptchankue/KalturaGeneratedAPIClientsPython',
     download_url = 'https://github.com/ptchankue/KalturaGeneratedAPIClientsPython/tarball/0.1',
