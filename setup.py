@@ -4,7 +4,7 @@ from setuptools import find_packages
 setup(
     name='python-kaltura',
     version='1.0.0',
-    url='http://www.kaltura.com/api_v3/testme/client-libs.php',
+    #url='http://www.kaltura.com/api_v3/testme/client-libs.php',
     packages=['KalturaClient', 'KalturaClient.Plugins'],
     #packages=find_packages(),
     license='AGPL',
@@ -14,7 +14,7 @@ setup(
             'poster',
         ],
     author='Patrick Tchankue',
-    keywords = ['kaltura', 'python'], # arbitrary keywords
+    keywords = ['kaltura', 'python', 'django', 'flask'], # arbitrary keywords
     url = 'https://github.com/ptchankue/KalturaGeneratedAPIClientsPython',
     download_url = 'https://github.com/ptchankue/KalturaGeneratedAPIClientsPython/tarball/0.1',
 )
