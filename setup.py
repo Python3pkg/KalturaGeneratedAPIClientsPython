@@ -9,7 +9,7 @@ setup(
     #packages=find_packages(),
     license='AGPL',
     description='A Python module for accessing the Kaltura API.',
-    long_description=open('README.txt').read(),
+    #long_description=open('README.txt').read(),
     install_requires = [
             'poster',
         ],
