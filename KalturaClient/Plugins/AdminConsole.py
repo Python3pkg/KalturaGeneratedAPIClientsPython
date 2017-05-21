@@ -27,8 +27,8 @@
 # ===================================================================================================
 # @package Kaltura
 # @subpackage Client
-from Core import *
-from FileSync import *
+from .Core import *
+from .FileSync import *
 from ..Base import *
 
 ########## enums ##########

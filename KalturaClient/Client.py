@@ -25,24 +25,24 @@
 #
 # @ignore
 # ===================================================================================================
-from Plugins.Core import *
-from Base import *
+from .Plugins.Core import *
+from .Base import *
 from xml.parsers.expat import ExpatError
 from xml.dom import minidom
 from threading import Timer
-from StringIO import StringIO
+from io import StringIO
 import hashlib
 import random
 import base64
 import socket
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import gzip
 import time
 import os
 
-from poster.streaminghttp import register_openers
-from poster.encode import multipart_encode
-import urllib2
+from .poster.streaminghttp import register_openers
+from .poster.encode import multipart_encode
+import urllib.request, urllib.error, urllib.parse
 
 try:
     from Crypto import Random
@@ -140,7 +140,7 @@ class KalturaClient(object):
             pluginProxy = PluginServicesProxy()
             setattr(self, pluginName, pluginProxy)
 
-        for (serviceName, serviceFactory) in plugin.getServices().items():
+        for (serviceName, serviceFactory) in list(plugin.getServices().items()):
             serviceClass = serviceFactory(self)
             if pluginName == '':
                 self.addCoreService(serviceName, serviceClass)
@@ -164,13 +164,13 @@ class KalturaClient(object):
         self.callsQueue = []
 
         if params != None:
-            result += '&' + urllib.urlencode(params.get())
+            result += '&' + urllib.parse.urlencode(params.get())
         self.log("Returned url [%s]" % result)
         return result        
         
     def queueServiceActionCall(self, service, action, returnType, params = KalturaParams(), files = KalturaFiles()):
         # in start session partner id is optional (default -1). if partner id was not set, use the one in the config
-        if not params.get().has_key("partnerId") or params.get()["partnerId"] == -1:
+        if "partnerId" not in params.get() or params.get()["partnerId"] == -1:
             if self.config.partnerId != None:
                 params.put("partnerId", self.config.partnerId)
         params.addStringIfDefined("ks", self.ks)
@@ -205,7 +205,7 @@ class KalturaClient(object):
         params.put("kalsig", signature)
 
         if self.method == KalturaClient.METHOD_GET and len(files.get()) == 0:
-            url += '&' + urllib.urlencode(params.get())
+            url += '&' + urllib.parse.urlencode(params.get())
             params = None
 
         self.log("request url: [%s]" % url)
@@ -222,18 +222,18 @@ class KalturaClient(object):
         if len(files.get()) == 0:
             data = None
             if params != None:
-                data = urllib.urlencode(params.get())
-            request = urllib2.Request(url, data, requestHeaders)
+                data = urllib.parse.urlencode(params.get())
+            request = urllib.request.Request(url, data, requestHeaders)
         else:
             fullParams = params
             fullParams.update(files)
             datagen, headers = multipart_encode(fullParams.get())
             headers.update(requestHeaders)
-            request = urllib2.Request(url, datagen, headers)
+            request = urllib.request.Request(url, datagen, headers)
 
         try:
-            f = urllib2.urlopen(request)
-        except Exception, e:
+            f = urllib.request.urlopen(request)
+        except Exception as e:
             raise KalturaClientException(e, KalturaClientException.ERROR_CONNECTION_FAILED)
         return f
 
@@ -245,15 +245,15 @@ class KalturaClient(object):
         try:
             try:
                 data = f.read()
-            except AttributeError, e:      # socket was closed while reading
+            except AttributeError as e:      # socket was closed while reading
                 raise KalturaClientException(e, KalturaClientException.ERROR_READ_TIMEOUT)
-            except Exception, e:
+            except Exception as e:
                 raise KalturaClientException(e, KalturaClientException.ERROR_READ_FAILED)
             if f.info().get('Content-Encoding') == 'gzip':
                 gzipFile = gzip.GzipFile(fileobj=StringIO(data))
                 try:
                     data = gzipFile.read()
-                except IOError, e:
+                except IOError as e:
                     raise KalturaClientException(e, KalturaClientException.ERROR_READ_GZIP_FAILED)
         finally:
             if requestTimeout != None:
@@ -287,7 +287,7 @@ class KalturaClient(object):
 
         try:        
             resultXml = minidom.parseString(postResult)
-        except ExpatError, e:
+        except ExpatError as e:
             raise KalturaClientException(e, KalturaClientException.ERROR_INVALID_XML)
             
         resultNode = getChildNodeByXPath(resultXml, 'xml/result')
@@ -412,7 +412,7 @@ class KalturaClient(object):
         rand = random.randint(0, 0x10000)
         expiry = int(time.time()) + expiry
         fields = [partnerId, partnerId, expiry, type, rand, userId, privileges]
-        fields = map(lambda x: str(x), fields)
+        fields = [str(x) for x in fields]
         info = ';'.join(fields)
         signature = KalturaClient.hash(adminSecretForSigning + info).encode('hex')
         decodedKS = signature + "|" + info
@@ -440,7 +440,7 @@ class KalturaClient(object):
         fields[KalturaClient.FIELD_USER] = str(userId)
 
         # build fields string
-        fieldsStr = urllib.urlencode(fields)
+        fieldsStr = urllib.parse.urlencode(fields)
         fieldsStr = Random.get_random_bytes(KalturaClient.RANDOM_SIZE) + fieldsStr
         fieldsStr = KalturaClient.hash(fieldsStr) + fieldsStr
 
@@ -470,12 +470,12 @@ class KalturaServiceActionCall(object):
         multiRequestParams = KalturaParams()
         multiRequestParams.put("%s:service" % multiRequestIndex, self.service)
         multiRequestParams.put("%s:action" % multiRequestIndex, self.action)
-        for (key, val) in self.params.get().items():
+        for (key, val) in list(self.params.get().items()):
             multiRequestParams.put("%s:%s" % (multiRequestIndex, key), val)
         return multiRequestParams
 
     def getFilesForMultiRequest(self, multiRequestIndex):
         multiRequestParams = KalturaFiles()
-        for (key, val) in self.files.get().items():
+        for (key, val) in list(self.files.get().items()):
             multiRequestParams.put("%s:%s" % (multiRequestIndex, key), val)
         return multiRequestParams

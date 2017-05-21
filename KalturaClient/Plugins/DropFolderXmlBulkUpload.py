@@ -27,9 +27,9 @@
 # ===================================================================================================
 # @package Kaltura
 # @subpackage Client
-from Core import *
-from BulkUploadXml import *
-from DropFolder import *
+from .Core import *
+from .BulkUploadXml import *
+from .DropFolder import *
 from ..Base import *
 
 ########## enums ##########

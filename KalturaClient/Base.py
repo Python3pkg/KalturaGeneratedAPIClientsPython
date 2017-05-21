@@ -87,7 +87,7 @@ class KalturaParams(object):
     def put(self, key, value = None):
         if value == None:
             self.params[key + '__null'] = ''
-        elif isinstance(value, unicode):
+        elif isinstance(value, str):
             self.params[key] = value.encode('utf8')
         else:
             self.params[key] = str(value)
@@ -96,7 +96,7 @@ class KalturaParams(object):
         self.params.update(props.get())
 
     def add(self, key, objectProps):
-        for (curKey, curValue) in objectProps.items():
+        for (curKey, curValue) in list(objectProps.items()):
             self.put('%s:%s' % (key, curKey), curValue)
 
     def addObjectIfDefined(self, key, obj):
@@ -116,7 +116,7 @@ class KalturaParams(object):
         if len(array) == 0:
             self.put('%s:-' % key, '')
         else:
-            for curIndex in xrange(len(array)):
+            for curIndex in range(len(array)):
                 self.addObjectIfDefined('%s:%s' % (key, curIndex), array[curIndex])
 
     def addStringIfDefined(self, key, value):
@@ -165,7 +165,7 @@ class KalturaParams(object):
             self.put(key, '0')
 
     def signature(self):
-        params = self.params.items()
+        params = list(self.params.items())
         params.sort()
         str = ""
         for (k, v) in params:
@@ -200,7 +200,7 @@ class KalturaObjectBase(object):
     def fromXmlImpl(self, node, propList):
         for childNode in node.childNodes:
             nodeName = childNode.nodeName
-            if not propList.has_key(nodeName):
+            if nodeName not in propList:
                 continue
             propLoader = propList[nodeName]
             if type(propLoader) == tuple:
@@ -304,7 +304,7 @@ class KalturaEnumsFactory(object):
 
     @staticmethod
     def create(enumValue, enumType):
-        if not KalturaEnumsFactory.enumFactories.has_key(enumType):
+        if enumType not in KalturaEnumsFactory.enumFactories:
             raise KalturaClientException("Unrecognized enum '%s'" % enumType, KalturaClientException.ERROR_INVALID_OBJECT_TYPE)
         return KalturaEnumsFactory.enumFactories[enumType](enumValue)
 
@@ -336,7 +336,7 @@ class KalturaObjectFactory(object):
         if objTypeNode == None:
             return None
         objType = getXmlNodeText(objTypeNode)
-        if not KalturaObjectFactory.objectFactories.has_key(objType):
+        if objType not in KalturaObjectFactory.objectFactories:
             objType = expectedType.__name__        
         result = KalturaObjectFactory.objectFactories[objType]()
         if not isinstance(result, expectedType):

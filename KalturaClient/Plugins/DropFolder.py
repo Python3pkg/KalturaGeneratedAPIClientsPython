@@ -27,8 +27,8 @@
 # ===================================================================================================
 # @package Kaltura
 # @subpackage Client
-from Core import *
-from Metadata import *
+from .Core import *
+from .Metadata import *
 from ..Base import *
 
 ########## enums ##########

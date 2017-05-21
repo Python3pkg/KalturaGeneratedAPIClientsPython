@@ -27,9 +27,9 @@
 # ===================================================================================================
 # @package Kaltura
 # @subpackage Client
-from Core import *
-from ScheduledTask import *
-from ContentDistribution import *
+from .Core import *
+from .ScheduledTask import *
+from .ContentDistribution import *
 from ..Base import *
 
 ########## enums ##########

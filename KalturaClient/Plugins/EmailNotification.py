@@ -27,8 +27,8 @@
 # ===================================================================================================
 # @package Kaltura
 # @subpackage Client
-from Core import *
-from EventNotification import *
+from .Core import *
+from .EventNotification import *
 from ..Base import *
 
 ########## enums ##########

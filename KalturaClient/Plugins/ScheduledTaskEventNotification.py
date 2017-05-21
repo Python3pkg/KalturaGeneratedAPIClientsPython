@@ -27,9 +27,9 @@
 # ===================================================================================================
 # @package Kaltura
 # @subpackage Client
-from Core import *
-from ScheduledTask import *
-from EventNotification import *
+from .Core import *
+from .ScheduledTask import *
+from .EventNotification import *
 from ..Base import *
 
 ########## enums ##########

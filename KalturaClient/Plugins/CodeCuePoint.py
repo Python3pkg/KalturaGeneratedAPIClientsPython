@@ -27,8 +27,8 @@
 # ===================================================================================================
 # @package Kaltura
 # @subpackage Client
-from Core import *
-from CuePoint import *
+from .Core import *
+from .CuePoint import *
 from ..Base import *
 
 ########## enums ##########

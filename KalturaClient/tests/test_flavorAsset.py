@@ -1,5 +1,5 @@
-from utils import GetConfig
-from utils import KalturaBaseTest
+from .utils import GetConfig
+from .utils import KalturaBaseTest
 
 from KalturaClient.Plugins.Core import KalturaFlavorAssetListResponse
 

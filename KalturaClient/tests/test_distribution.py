@@ -1,7 +1,7 @@
 import unittest
 
-from utils import GetConfig
-from utils import KalturaBaseTest
+from .utils import GetConfig
+from .utils import KalturaBaseTest
 
 from KalturaClient.Plugins.ContentDistribution import KalturaDistributionProviderListResponse, KalturaDistributionProvider
 from KalturaClient.Plugins.ContentDistribution import KalturaDistributionProfileListResponse, KalturaDistributionProfile

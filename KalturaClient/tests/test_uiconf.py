@@ -1,7 +1,7 @@
 import re
 
-from utils import GetConfig
-from utils import KalturaBaseTest
+from .utils import GetConfig
+from .utils import KalturaBaseTest
 
 from KalturaClient.Plugins.Core import KalturaUiConf, KalturaUiConfObjType, KalturaUiConfFilter
 from KalturaClient.Plugins.Core import KalturaUiConfListResponse

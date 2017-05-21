@@ -1,8 +1,8 @@
 import time
 
-from utils import GetConfig
-from utils import KalturaBaseTest
-from utils import getTestFile
+from .utils import GetConfig
+from .utils import KalturaBaseTest
+from .utils import getTestFile
 
 from KalturaClient.Plugins.Core import KalturaPlaylist, KalturaPlaylistType
 from KalturaClient.Plugins.Core import KalturaPlaylistListResponse
@@ -30,7 +30,7 @@ class PlaylistTests(KalturaBaseTest):
         kplaylist = self.client.playlist.add(kplaylist)        
         self.assertIsInstance(kplaylist, KalturaPlaylist)
         
-        self.assertIsInstance(kplaylist.getId(), unicode)
+        self.assertIsInstance(kplaylist.getId(), str)
         
         #cleanup
         self.client.playlist.delete(kplaylist.getId())
@@ -84,7 +84,7 @@ class PlaylistTests(KalturaBaseTest):
         self.addCleanup(self.client.media.delete, mediaEntry2.getId())
         
         #playlistContent is simply a comma separated string of id's ?  
-        playlistContent = u','.join([mediaEntry1.getId(), mediaEntry2.getId()])
+        playlistContent = ','.join([mediaEntry1.getId(), mediaEntry2.getId()])
                         
         kplaylist = KalturaPlaylist()
         kplaylist.setName('pytest.PlaylistTests.test_updateStaticContent')
@@ -129,7 +129,7 @@ class PlaylistTests(KalturaBaseTest):
         newplaylist = KalturaPlaylist()
         newplaylist.setReferenceId(referenceId)
     
-        playlistContent = u','.join([mediaEntry.getId()])
+        playlistContent = ','.join([mediaEntry.getId()])
         newplaylist.setPlaylistContent(playlistContent)
         
         self.client.playlist.update(playlistId, newplaylist)
@@ -171,7 +171,7 @@ class DynamicPlaylistTests(KalturaBaseTest):
         kplaylist = self.client.playlist.add(kplaylist)        
         self.assertIsInstance(kplaylist, KalturaPlaylist)
         
-        self.assertIsInstance(kplaylist.getId(), unicode)
+        self.assertIsInstance(kplaylist.getId(), str)
         
         #cleanup
         self.client.playlist.delete(kplaylist.getId())        
@@ -315,11 +315,11 @@ class DynamicPlaylistTests(KalturaBaseTest):
         kplaylist = self.client.playlist.add(kplaylist)
         self.addCleanup(self.client.playlist.delete, kplaylist.getId())
         
-        print "Waiting for Media Entry to be 'Ready'"
+        print("Waiting for Media Entry to be 'Ready'")
         sleeptime=5
         mediaEntry = self.client.media.get(mediaEntry.getId())
         while mediaEntry.getStatus().getValue() != '2':
-            print "media entry status is %s " % (mediaEntry.getStatus().getValue())
+            print("media entry status is %s " % (mediaEntry.getStatus().getValue()))
             time.sleep(sleeptime)
             mediaEntry = self.client.media.get(mediaEntry.getId())
         
